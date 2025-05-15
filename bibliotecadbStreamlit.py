@@ -24,7 +24,7 @@ def validar_email(email):
 def adicionar_no_DB(email,senha):
     engnine = conCursor()
 
-    with engine.begin() as conn:
+    with engnine.begin() as conn:
         conn.execute(f"INSERT INTO dados (email,senha) VALUES('{email}','{senha}')")
         st.success("Usuario deletado com sucesso!")
 
