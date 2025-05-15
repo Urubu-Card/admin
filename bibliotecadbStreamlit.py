@@ -2,7 +2,7 @@ import streamlit as st
 import re 
 
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import pandas as pd
 import os
 import time
