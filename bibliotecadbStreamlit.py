@@ -24,15 +24,9 @@ def validar_email(email):
 def adicionar_no_DB(email,senha):
     engnine = conCursor()
 
-    adicionar = f"INSERT INTO dados (email,senha) VALUES({email},{senha})"
-
-    df = pd.read_sql(adicionar,engnine)
-
-    if not df.empty:
-        with st.empty:
-            with st.spinner("Aguarde adicionando usuario..."):
-                time.sleep(3)
-                st.success ("Usuario Adiconado com Sucesso!")
+    with engine.begin() as conn:
+        conn.execute(f"INSERT INTO dados (email,senha) VALUES({email},{senha})")
+        st.success("Usuario deletado com sucesso!")
 
 
 
