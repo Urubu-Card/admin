@@ -22,11 +22,13 @@ def validar_email(email):
     return re.match(padrao, email) is not None
 
 def adicionar_no_DB(email,senha):
-    engnine = conCursor()
+    engine = conCursor()
+    adicionar = text("INSERT INTO dados (email, senha) VALUES (:email, :senha)")
 
-    with engnine.begin() as conn:
-        conn.execute(f"INSERT INTO dados (email,senha) VALUES('{email}','{senha}')")
-        st.success("Usuario deletado com sucesso!")
+    with engine.begin() as conn:
+        conn.execute(adicionar, {"email": email, "senha": senha})
+
+        st.success("Usuário adicionado com sucesso!")
 
 
 
