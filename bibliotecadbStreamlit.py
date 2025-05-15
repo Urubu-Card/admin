@@ -97,7 +97,7 @@ def stpri():
     if escolha =="Adicionar novo usuario : ":
         stpesq()
     elif escolha =="Listar todos os usuarios : " :
-        stlistar()stdeletar()
+        stlistar()
     elif escolha =="Deletar um usuario :  ":
         stdeletar()
     
