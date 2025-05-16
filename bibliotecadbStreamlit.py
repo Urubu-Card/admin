@@ -34,6 +34,7 @@ def adicionar_no_DB(email, senha):
     with st.empty():
         time.sleep(3):  
         st.success("Usuário Adicionado com Sucesso!")
+        
    
     
 
