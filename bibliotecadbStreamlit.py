@@ -22,16 +22,17 @@ def validar_email(email):
 
 def adicionar_no_DB(email,senha):
     engine = conCursor()
-    adicionar = "INSERT INTO usuarios (email, senha) VALUES (%s, %s)"
+    #adicionar = "INSERT INTO usuarios (email, senha) VALUES (%s, %s)"
+    adicionar = f"INSERT INTO usuarios (email,senha) VALUES({email},{senha})"
 
-    # Executando a consulta de inserção no banco
+    
     with engine.connect() as conn:
-        conn.execute(adicionar, (email, senha))  # Passando os parâmetros corretamente
+        conn.execute(adicionar, (email, senha))  
 
-    # Exibindo o feedback no Streamlit
+   
     with st.empty():
         with st.spinner("Aguarde adicionando usuário..."):
-            time.sleep(3)  # Simulando tempo de processamento
+            time.sleep(3)  
             st.success("Usuário Adicionado com Sucesso!")
     
 
