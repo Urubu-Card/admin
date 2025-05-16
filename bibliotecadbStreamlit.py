@@ -23,14 +23,18 @@ def validar_email(email):
 def adicionar_no_DB(email,senha):
     engine = conCursor()
 
-    adicionar = f"INSERT INTO usuarios (email,senha) VALUES({email},{senha})"
+    adicionar = "INSERT INTO usuarios (email, senha) VALUES (%s, %s)"
 
-    engine.execute(adicionar,engine)
+    
+    with engine.connect() as conn:
+        # Executando a inserção com parâmetros para evitar SQL Injection
+        conn.execute(adicionar, (email, senha))
 
-    with st.empty:
-        with st.spinner("Aguarde adicionando usuario..."):
-            time.sleep(3)
-            st.success ("Usuario Adiconado com Sucesso!")
+    
+    with st.empty():
+        with st.spinner("Aguarde adicionando usuário..."):
+            time.sleep(3)  
+            st.success("Usuário Adicionado com Sucesso!")
 
 
 
