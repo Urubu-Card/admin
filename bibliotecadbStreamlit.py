@@ -27,7 +27,7 @@ def adicionar_no_DB(email,senha):
 
     
     with engine.connect() as conn:
-        # Executando a inserção com parâmetros para evitar SQL Injection
+        
         conn.execute(adicionar, (email, senha))
 
     
