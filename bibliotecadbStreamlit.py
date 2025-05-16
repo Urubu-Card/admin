@@ -5,41 +5,38 @@ import pandas as pd
 import os
 import time
 
-# Função para conectar ao banco de dados
+
 def conCursor():
-    # Conexão com o banco de dados usando a URL de conexão do Railway
+    "Conexão com o banco de dados usando a URL de conexão do Railway"
     DATABASE_URL = os.environ["DATABASE_URL"]
     engine = create_engine(DATABASE_URL)
     return engine
 
-# Função para validar o email
+
 def validar_email(email):
     padrao = r"^[a-zA-Z0-9._%+-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,}$"
     return re.match(padrao, email) is not None
 
-# Função para adicionar um novo usuário ao banco de dados
+
 def adicionar_no_DB(email, senha):
     engine = conCursor()
     adicionar = "INSERT INTO usuarios (email, senha) VALUES (%s, %s)"
-
-    try:
-        # Usando raw_connection() para garantir a execução correta da consulta
-        conn = engine.raw_connection()  # Abre a conexão manualmente
-        cursor = conn.cursor()  # Cria o cursor manualmente
+    
+        conn = engine.raw_connection()  
+        cursor = conn.cursor() 
         
-        # Executando a consulta de inserção no banco com os parâmetros
-        cursor.execute(adicionar, (email, senha))  # Os parâmetros são passados corretamente
-        conn.commit()  # Commitando a transação para garantir que a inserção aconteça
+        cursor.execute(adicionar, (email, senha))  
+        conn.commit()  
 
-        cursor.close()  # Fecha o cursor
-        conn.close()  # Fecha a conexão
+        cursor.close()  
+        conn.close()  
         
         with st.empty():
             with st.spinner("Aguarde adicionando usuário..."):
                 time.sleep(3)  # Simulando tempo de processamento
                 st.success("Usuário Adicionado com Sucesso!")
-    except Exception as e:
-        st.error(f"Erro ao adicionar usuário: {e}")
+   
+    
 
 # Função de pesquisa e validação para adicionar o usuário
 def stpesq():
@@ -99,8 +96,9 @@ def stlistar():
 # Função principal para o menu
 def stpri():
     with st.sidebar:
+        st.subheader("Menu do Admin : ")
         escolha = st.selectbox("Qual ação deseja fazer?", ("Adicionar novo usuário", "Listar todos os usuários", "Deletar um usuário"))
-        st.header("Qual ação deseja fazer?")
+        
     
     if escolha == "Adicionar novo usuário":
         stpesq()
