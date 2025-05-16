@@ -21,11 +21,11 @@ def validar_email(email):
     return re.match(padrao, email) is not None
 
 def adicionar_no_DB(email,senha):
-    engnine = conCursor()
+    engine = conCursor()
 
     adicionar = f"INSERT INTO usuarios (email,senha) VALUES({email},{senha})"
 
-    engnine.execute(adicionar,engnine)
+    engine.execute(adicionar,engine)
 
     with st.empty:
         with st.spinner("Aguarde adicionando usuario..."):
