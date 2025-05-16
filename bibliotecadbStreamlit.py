@@ -58,25 +58,31 @@ def stdeletar():
     st.subheader("Qual é o ID do usuário que deseja deletar? ")
     delid = st.number_input("ID do usuário:", min_value=1, step=1, label_visibility="collapsed")
 
-    if st.button("Deletar usuário"):
+    # Controle de visibilidade do botão de confirmação de deleção usando session_state
+    if delid and st.button("Deletar usuário"):
+        # Verifica se o id existe na base
         buscar = f"SELECT * FROM usuarios WHERE id = {delid}"
 
         resubusca = pd.read_sql(buscar, engine)
         if not resubusca.empty:
+            st.session_state.deletar_confirmado = False  # Resetando a confirmação
+
+            # Pergunta para confirmação de exclusão
             st.warning("Tem certeza que deseja deletar esse usuário? Não será possível recuperá-lo depois.")
+            
+            # Verifica se o botão de confirmação foi clicado
             if st.button("Sim, eu tenho certeza."):
-                # Corrigindo para deletar da tabela 'usuarios'
-                conn = engine.raw_connection()
-                cursor = conn.cursor()
-                cursor.execute(f"DELETE FROM usuarios WHERE id = {delid}")
-                conn.commit()  # Commitando a transação
+                st.session_state.deletar_confirmado = True
+                with engine.begin() as conn:
+                    conn.execute(f"DELETE FROM usuarios WHERE id = {delid}")
+                    st.success("Usuário deletado com sucesso!")
 
-                cursor.close()  # Fechando o cursor
-                conn.close()  # Fechando a conexão
-
-                st.success("Usuário deletado com sucesso!")
         else:
             st.error("Nenhum usuário encontrado.")
+
+    # Exibe ou esconde o botão de confirmação com base no estado
+    if 'deletar_confirmado' in st.session_state and st.session_state.deletar_confirmado:
+        st.success("Usuário deletado com sucesso!")
 
 # Função para listar todos os usuários
 def stlistar():
