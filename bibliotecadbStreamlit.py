@@ -22,19 +22,19 @@ def adicionar_no_DB(email, senha):
     engine = conCursor()
     adicionar = "INSERT INTO usuarios (email, senha) VALUES (%s, %s)"
     
-        conn = engine.raw_connection()  
-        cursor = conn.cursor() 
-        
-        cursor.execute(adicionar, (email, senha))  
-        conn.commit()  
+    conn = engine.raw_connection()  
+    cursor = conn.cursor() 
+    
+    cursor.execute(adicionar, (email, senha))  
+    conn.commit()  
 
-        cursor.close()  
-        conn.close()  
-        
-        with st.empty():
-            with st.spinner("Aguarde adicionando usuário..."):
-                time.sleep(3)  # Simulando tempo de processamento
-                st.success("Usuário Adicionado com Sucesso!")
+    cursor.close()  
+    conn.close()  
+    
+    with st.empty():
+        with st.spinner("Aguarde adicionando usuário..."):
+            time.sleep(3)  # Simulando tempo de processamento
+            st.success("Usuário Adicionado com Sucesso!")
    
     
 
