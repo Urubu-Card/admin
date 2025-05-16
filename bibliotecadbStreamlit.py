@@ -14,7 +14,7 @@ def conCursor():
 
     # Para leitura e escrita com pandas
     return engine
-
+    
 
 def validar_email(email):
     padrao = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -25,13 +25,12 @@ def adicionar_no_DB(email,senha):
 
     adicionar = f"INSERT INTO usuarios (email,senha) VALUES({email},{senha})"
 
-    df = pd.read_sql(adicionar,engnine)
+    engnine.execute(adicionar,engnine)
 
-    if not df.empty:
-        with st.empty:
-            with st.spinner("Aguarde adicionando usuario..."):
-                time.sleep(3)
-                st.success ("Usuario Adiconado com Sucesso!")
+    with st.empty:
+        with st.spinner("Aguarde adicionando usuario..."):
+            time.sleep(3)
+            st.success ("Usuario Adiconado com Sucesso!")
 
 
 
@@ -47,7 +46,7 @@ def stpesq():
         if not email or not senha:
             st.error("Erro : E-Mail ou Senha não foram inseridos.")
         elif not validar_email(email):
-            st.error("Erro : O email não foi digitado de maneira correta.")
+            st.erro("Erro : O email não foi digitado de maneira correta.")
         else:
             adicionar_no_DB(email,senha)
 
@@ -89,11 +88,15 @@ def stlistar():
 def stpri():
     
     with st.sidebar:
-        escolha = st.selectbox("Qual ação deseja fazer?",("Adicionar novo usuario : ","Listar todos os usuarios : ","Deletar um usuario :  "))
-        
-    if escolha == "Adicionar novo usuario : ":
+
+        escolha = st.selectbox()
+        st.header("Qual ação deseja fazer?")
+        add = st.button("Adicionar novo usuario : ")
+        lista = st.button("Listar todos os usuarios : ")
+        dele = st.button("Deletar um usuario :  ")
+    if add:
         stpesq()
-    elif escolha == "Listar todos os usuarios : ":
+    elif dele:
         stdeletar()
-    elif escolha == "Deletar um usuario :  ":
+    elif lista:
         stlistar()
