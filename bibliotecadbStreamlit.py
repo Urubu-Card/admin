@@ -32,9 +32,8 @@ def adicionar_no_DB(email, senha):
     conn.close()  
     
     with st.empty():
-        with st.spinner("Aguarde adicionando usuário..."):
-            with time.sleep(3):  # Simulando tempo de processamento
-                st.success("Usuário Adicionado com Sucesso!")
+        with time.sleep(3):  
+            st.success("Usuário Adicionado com Sucesso!")
    
     
 
