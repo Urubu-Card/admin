@@ -59,7 +59,7 @@ def stdeletar():
     delid = st.number_input("ID do usuário:", min_value=1, step=1, label_visibility="collapsed")
 
     # Controle de visibilidade do botão de confirmação de deleção usando session_state
-    if delid and st.button("Deletar usuário"):
+     if delid and st.button("Deletar usuário"):
         # Verifica se o id existe na base
         buscar = f"SELECT * FROM usuarios WHERE id = {delid}"
 
@@ -72,6 +72,7 @@ def stdeletar():
             
             # Verifica se o botão de confirmação foi clicado
             if st.button("Sim, eu tenho certeza."):
+                # Quando o botão de confirmação é clicado, a variável session_state é alterada para True
                 st.session_state.deletar_confirmado = True
                 with engine.begin() as conn:
                     conn.execute(f"DELETE FROM usuarios WHERE id = {delid}")
@@ -79,10 +80,6 @@ def stdeletar():
 
         else:
             st.error("Nenhum usuário encontrado.")
-
-    # Exibe ou esconde o botão de confirmação com base no estado
-    if 'deletar_confirmado' in st.session_state and st.session_state.deletar_confirmado:
-        st.success("Usuário deletado com sucesso!")
 
 # Função para listar todos os usuários
 def stlistar():
