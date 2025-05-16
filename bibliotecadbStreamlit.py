@@ -58,16 +58,16 @@ def stdeletar():
     st.subheader("Qual é o ID do usuário que deseja deletar? ")
     delid = st.number_input("ID do usuário:", min_value=1, step=1, label_visibility="collapsed")
 
-    
     if 'deletar_confirmado' not in st.session_state:
         st.session_state.deletar_confirmado = False
 
     # Controle de visibilidade do botão de confirmação de deleção usando session_state
     if delid and st.button("Deletar usuário"):
-        # Verifica se o id existe na base
-        buscar = f"SELECT * FROM usuarios WHERE id = {delid}"
+        
+        # Usando parâmetros na consulta SQL
+        buscar = "SELECT * FROM usuarios WHERE id = %s"
+        resubusca = pd.read_sql(buscar, engine, params=(delid,))
 
-        resubusca = pd.read_sql(buscar, engine)
         if not resubusca.empty:
             # Resetando a confirmação
             st.session_state.deletar_confirmado = False
@@ -79,11 +79,13 @@ def stdeletar():
             if st.button("Sim, eu tenho certeza."):
                 # Quando o botão de confirmação é clicado, a variável session_state é alterada para True
                 st.session_state.deletar_confirmado = True
+                # Usando parâmetros para deletar o usuário
                 with engine.begin() as conn:
-                    conn.execute(f"DELETE FROM usuarios WHERE id = {delid}")
+                    conn.execute("DELETE FROM usuarios WHERE id = %s", (delid,))
                     st.success("Usuário deletado com sucesso!")
+        else:
+            st.error("Usuário não encontrado.")
 
-# Função para listar todos os usuários
 def stlistar():
     engine = conCursor()
 
