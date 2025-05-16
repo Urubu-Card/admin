@@ -58,9 +58,9 @@ def stdeletar():
     st.subheader("Qual é o ID do usuário que deseja deletar? ")
     delid = st.number_input("ID do usuário:", min_value=1, step=1, label_visibility="collapsed")
 
-    # Controle de visibilidade do botão de confirmação de deleção usando session_state
-     if delid and st.button("Deletar usuário"):
-        # Verifica se o id existe na base
+    
+    if delid and st.button("Deletar usuário"):
+        
         buscar = f"SELECT * FROM usuarios WHERE id = {delid}"
 
         resubusca = pd.read_sql(buscar, engine)
