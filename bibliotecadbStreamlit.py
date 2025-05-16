@@ -22,21 +22,18 @@ def validar_email(email):
 
 def adicionar_no_DB(email,senha):
     engine = conCursor()
-
     adicionar = "INSERT INTO usuarios (email, senha) VALUES (%s, %s)"
 
-    
+    # Executando a consulta de inserção no banco
     with engine.connect() as conn:
-        
-        conn.execute(adicionar, (email, senha))
+        conn.execute(adicionar, (email, senha))  # Passando os parâmetros corretamente
 
-    
+    # Exibindo o feedback no Streamlit
     with st.empty():
         with st.spinner("Aguarde adicionando usuário..."):
-            time.sleep(3)  
+            time.sleep(3)  # Simulando tempo de processamento
             st.success("Usuário Adicionado com Sucesso!")
-
-
+    
 
 def stpesq():
 
@@ -50,7 +47,7 @@ def stpesq():
         if not email or not senha:
             st.error("Erro : E-Mail ou Senha não foram inseridos.")
         elif not validar_email(email):
-            st.erro("Erro : O email não foi digitado de maneira correta.")
+            st.error("Erro : O email não foi digitado de maneira correta.")
         else:
             adicionar_no_DB(email,senha)
 
@@ -68,7 +65,7 @@ def stdeletar():
             st.warning("Tem certeza que deseja deletar esse usuario?Não será possivel recuperalo depois")
             if st.button("Sim eu tenho certeza."):
                 with engine.begin() as conn:
-                    conn.execute(f"DELETE FROM dados WHERE id = {delid}")
+                    conn.execute(f"DELETE FROM usuarios WHERE id = {delid}")
                     st.success("Usuario deletado com sucesso!")
         else:
             st.error("---Nennhum Usuario Encontrado---")
