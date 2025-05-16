@@ -2,7 +2,7 @@ import streamlit as st
 import re 
 
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 import pandas as pd
 import os
 import time
@@ -16,19 +16,22 @@ def conCursor():
     return engine
 
 
-
 def validar_email(email):
     padrao = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     return re.match(padrao, email) is not None
 
 def adicionar_no_DB(email,senha):
-    engine = conCursor()
-    adicionar = text("INSERT INTO dados (email, senha) VALUES (:email, :senha)")
+    engnine = conCursor()
 
-    with engine.begin() as conn:
-        conn.execute(adicionar, {"email": email, "senha": senha})
+    adicionar = f"INSERT INTO usuarios (email,senha) VALUES({email},{senha})"
 
-        st.success("Usuário adicionado com sucesso!")
+    df = pd.read_sql(adicionar,engnine)
+
+    if not df.empty:
+        with st.empty:
+            with st.spinner("Aguarde adicionando usuario..."):
+                time.sleep(3)
+                st.success ("Usuario Adiconado com Sucesso!")
 
 
 
@@ -44,7 +47,7 @@ def stpesq():
         if not email or not senha:
             st.error("Erro : E-Mail ou Senha não foram inseridos.")
         elif not validar_email(email):
-            st.error("Erro : O email não foi digitado de maneira correta.")
+            st.erro("Erro : O email não foi digitado de maneira correta.")
         else:
             adicionar_no_DB(email,senha)
 
@@ -55,7 +58,7 @@ def stdeletar():
     st.subheader("Qual e o id do usuario que deseja deletar? ")
     delid = st.number_input("ID da Tarefa :",min_value=1,step=1,label_visibility="collapsed")
     if st.button("Deletar Tarefa"):
-        buscar = f"SELECT * FROM dados WHERE id = '{delid}'"
+        buscar = f"SELECT * FROM usuarios WHERE id = '{delid}'"
 
         resubusca = pd.read_sql(buscar,engine)
         if not resubusca.empty:
@@ -73,7 +76,7 @@ def stlistar():
 
     st.subheader("Lista de Usuarios : ")
 
-    lista ="SELECT * FROM dados"
+    lista ="SELECT * FROM usuarios"
 
     listagem = pd.read_sql(lista,engine)
 
@@ -83,18 +86,16 @@ def stlistar():
         st.error("Nenhum usuario cadastrado")
 
 
-
-
 def stpri():
     
     with st.sidebar:
-        escolha = st.selectbox("Qual ação deseja fazer?",("Adicionar novo usuario : ","Listar todos os usuarios : ","Deletar um usuario :  "))
-        
-    if escolha =="Adicionar novo usuario : ":
+        st.header("Qual ação deseja fazer?")
+        add = st.button("Adicionar novo usuario : ")
+        lista = st.button("Listar todos os usuarios : ")
+        dele = st.button("Deletar um usuario :  ")
+    if add:
         stpesq()
-    elif escolha =="Listar todos os usuarios : " :
-        stlistar()
-    elif escolha =="Deletar um usuario :  ":
+    elif dele:
         stdeletar()
-    
-    
+    elif lista:
+        stlistar()
