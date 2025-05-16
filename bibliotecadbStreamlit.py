@@ -89,13 +89,11 @@ def stlistar():
 def stpri():
     
     with st.sidebar:
-        st.header("Qual ação deseja fazer?")
-        add = st.button("Adicionar novo usuario : ")
-        lista = st.button("Listar todos os usuarios : ")
-        dele = st.button("Deletar um usuario :  ")
-    if add:
+        escolha = st.selectbox("Qual ação deseja fazer?",("Adicionar novo usuario : ","Listar todos os usuarios : ","Deletar um usuario :  "))
+        
+    if escolha == "Adicionar novo usuario : ":
         stpesq()
-    elif dele:
+    elif escolha == "Listar todos os usuarios : ":
         stdeletar()
-    elif lista:
+    elif escolha == "Deletar um usuario :  ":
         stlistar()
