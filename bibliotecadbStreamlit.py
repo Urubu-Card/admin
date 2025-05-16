@@ -47,7 +47,7 @@ def stpesq():
         if not email or not senha:
             st.error("Erro : E-Mail ou Senha não foram inseridos.")
         elif not validar_email(email):
-            st.erro("Erro : O email não foi digitado de maneira correta.")
+            st.error("Erro : O email não foi digitado de maneira correta.")
         else:
             adicionar_no_DB(email,senha)
 
