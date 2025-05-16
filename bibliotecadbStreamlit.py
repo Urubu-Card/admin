@@ -28,7 +28,7 @@ def adicionar_no_DB(email,senha):
     
     
         try:
-        # Usando raw_connection() para garantir a execução correta da consulta
+        
         conn = engine.raw_connection()  # Abre a conexão manualmente
         cursor = conn.cursor()  # Cria o cursor manualmente
         
@@ -43,7 +43,7 @@ def adicionar_no_DB(email,senha):
             with st.spinner("Aguarde adicionando usuário..."):
                 time.sleep(3)  # Simulando tempo de processamento
                 st.success("Usuário Adicionado com Sucesso!")
-    except Exception as e:
+        except Exception as e:
         st.error(f"Erro ao adicionar usuário: {e}")
     
 
