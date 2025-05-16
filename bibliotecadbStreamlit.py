@@ -78,7 +78,7 @@ def stdeletar():
             
             # Verifica se o botão de confirmação foi clicado
             if st.button("Sim, eu tenho certeza."):
-                # Quando o botão de confirmação é clicado, a variável session_state é alterada para True
+                # Atualiza o estado de 'deletar_confirmado' para True
                 st.session_state.deletar_confirmado = True
                 st.write(f"deletar_confirmado (depois da confirmação): {st.session_state.deletar_confirmado}")
                 
@@ -88,7 +88,6 @@ def stdeletar():
                     st.success("Usuário deletado com sucesso!")
         else:
             st.error("Usuário não encontrado.")
-
 def stlistar():
     engine = conCursor()
 
