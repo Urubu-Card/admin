@@ -27,13 +27,13 @@ def adicionar_no_DB(email,senha):
 
     
     
-    try:
+        try:
         # Usando raw_connection() para garantir a execução correta da consulta
         conn = engine.raw_connection()  # Abre a conexão manualmente
         cursor = conn.cursor()  # Cria o cursor manualmente
         
-        # Executando a consulta de inserção no banco
-        cursor.execute(adicionar, (email, senha))
+        # Executando a consulta de inserção no banco com os parâmetros
+        cursor.execute(adicionar, (email, senha))  # Os parâmetros são passados corretamente
         conn.commit()  # Commitando a transação para garantir que a inserção aconteça
 
         cursor.close()  # Fecha o cursor
