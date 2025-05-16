@@ -26,14 +26,20 @@ def adicionar_no_DB(email,senha):
     adicionar = f"INSERT INTO usuarios (email,senha) VALUES({email},{senha})"
 
     
-    with engine.connect() as conn:
-        conn.execute(adicionar, (email, senha))  
-
-   
-    with st.empty():
-        with st.spinner("Aguarde adicionando usuário..."):
-            time.sleep(3)  
-            st.success("Usuário Adicionado com Sucesso!")
+    
+    try:
+        # Usando raw_connection() para garantir a execução correta da consulta
+        with engine.raw_connection() as conn:
+            # Executando a consulta de inserção no banco com o método execute
+            with conn.cursor() as cursor:
+                cursor.execute(adicionar, (email, senha))
+                conn.commit()  # Commitando a transação
+        with st.empty():
+            with st.spinner("Aguarde adicionando usuário..."):
+                time.sleep(3)  # Simulando tempo de processamento
+                st.success("Usuário Adicionado com Sucesso!")
+    except Exception as e:
+        st.error(f"Erro ao adicionar usuário: {e}")
     
 
 def stpesq():
