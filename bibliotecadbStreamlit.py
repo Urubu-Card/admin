@@ -59,6 +59,7 @@ def stdeletar():
     delid = st.number_input("ID do usuário:", min_value=1, step=1, label_visibility="collapsed")
 
     # Inicializa 'deletar_confirmado' se não existir
+    st.write(f"Tipo de st.session_state: {type(st.session_state)}")
     if 'deletar_confirmado' not in st.session_state:
         st.session_state.deletar_confirmado = False
 
