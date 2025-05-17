@@ -76,7 +76,7 @@ def stdeletar():
         if st.button("Sim, eu tenho certeza."):
             try:
                 with engine.begin() as conn:
-                    conn.execute("DELETE FROM usuarios WHERE id = %s", (st.session_state.delid_pendente,))
+                    conn.execute("DELETE FROM usuarios WHERE id = %s", [(id,)])
                 st.success("Usuário deletado com sucesso!")
             except Exception as e:
                 st.error(f"Erro ao deletar: {e}")
