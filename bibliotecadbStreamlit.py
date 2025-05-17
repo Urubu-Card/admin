@@ -51,7 +51,6 @@ def stpesq():
         else:
             adicionar_no_DB(email, senha)
 
-# Função para deletar um usuário
 def stdeletar():
     engine = conCursor()
 
@@ -59,36 +58,32 @@ def stdeletar():
     delid = st.number_input("ID do usuário:", min_value=1, step=1, label_visibility="collapsed")
 
     # Inicializa 'deletar_confirmado' se não existir
-    st.write(f"Tipo de st.session_state: {type(st.session_state)}")
     if 'deletar_confirmado' not in st.session_state:
         st.session_state.deletar_confirmado = False
 
-    # Verificação e lógica de deletação
+    # Quando o botão de deletar é clicado
     if delid and st.button("Deletar usuário"):
-
-        # Usando parâmetros na consulta SQL
         buscar = "SELECT * FROM usuarios WHERE id = %s"
         resubusca = pd.read_sql(buscar, engine, params=(delid,))
 
         if not resubusca.empty:
-            # Mostra o estado atual de 'deletar_confirmado' para depuração
-            st.write(f"deletar_confirmado (antes da confirmação): {st.session_state.deletar_confirmado}")
-
-            # Pergunta para confirmação de exclusão
             st.warning("Tem certeza que deseja deletar esse usuário? Não será possível recuperá-lo depois.")
-            
-            # Verifica se o botão de confirmação foi clicado
-            if st.button("Sim, eu tenho certeza."):
-                # Atualiza o estado de 'deletar_confirmado' para True
-                st.session_state.deletar_confirmado = True
-                st.write(f"deletar_confirmado (depois da confirmação): {st.session_state.deletar_confirmado}")
-                
-                # Executa a deleção no banco de dados
+            st.session_state.delid_pendente = delid  # salva o ID
+            st.session_state.confirmacao_pendente = True
+
+    # Quando o botão de confirmação for clicado
+    if st.session_state.get("confirmacao_pendente", False):
+        if st.button("Sim, eu tenho certeza."):
+            try:
                 with engine.begin() as conn:
-                    conn.execute("DELETE FROM usuarios WHERE id = %s", (delid,))
-                    st.success("Usuário deletado com sucesso!")
-        else:
-            st.error("Usuário não encontrado.")
+                    conn.execute("DELETE FROM usuarios WHERE id = %s", (st.session_state.delid_pendente,))
+                st.success("Usuário deletado com sucesso!")
+            except Exception as e:
+                st.error(f"Erro ao deletar: {e}")
+            
+            # Resetar os estados
+            st.session_state.confirmacao_pendente = False
+            st.session_state.delid_pendente = None
 def stlistar():
     engine = conCursor()
 
