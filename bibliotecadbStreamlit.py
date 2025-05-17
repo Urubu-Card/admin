@@ -73,17 +73,20 @@ def stdeletar():
 
     # Quando o botão de confirmação for clicado
     if st.session_state.get("confirmacao_pendente", False):
-        if st.button("Sim, eu tenho certeza."):
-            try:
-                with engine.begin() as conn:
-                    cursor.execute(text('DELETE FROM usuarios WHERE id = :id'), {"id": id_usuario})
-                st.success("Usuário deletado com sucesso!")
-            except Exception as e:
-                st.error(f"Erro ao deletar: {e}")
-            
-            # Resetar os estados
-            st.session_state.confirmacao_pendente = False
-            st.session_state.delid_pendente = None
+    if st.button("Sim, eu tenho certeza."):
+        try:
+            with engine.begin() as conn:
+                conn.execute(
+                    text("DELETE FROM usuarios WHERE id = :id"),
+                    {"id": st.session_state.delid_pendente}
+                )
+            st.success("Usuário deletado com sucesso!")
+        except Exception as e:
+            st.error(f"Erro ao deletar: {e}")
+
+        # Resetar os estados
+        st.session_state.confirmacao_pendente = False
+        st.session_state.delid_pendente = None
 def stlistar():
     engine = conCursor()
 
