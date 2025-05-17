@@ -5,6 +5,9 @@ import pandas as pd
 import os
 import time
 from sqlalchemy import text
+import bcrypt
+import hashlib
+
 
 def conCursor():
     "Conexão com o banco de dados usando a URL de conexão do Railway"
@@ -19,13 +22,19 @@ def validar_email(email):
 
 
 def adicionar_no_DB(email, senha):
+
+    # Gerar o hash da senha
+    senha_bytes = senha.encode('utf-8')  # transforma em bytes
+    senha_hash = bcrypt.hashpw(senha_bytes, bcrypt.gensalt())  # gera o hash
+
     engine = conCursor()
     adicionar = "INSERT INTO usuarios (email, senha) VALUES (%s, %s)"
     
     conn = engine.raw_connection()  
     cursor = conn.cursor() 
     
-    cursor.execute(adicionar, (email, senha))  
+    # Insere o hash no lugar da senha original
+    cursor.execute(adicionar, (email, senha_hash.decode('utf-8')))  
     conn.commit()  
 
     cursor.close()  
