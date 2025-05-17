@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import os
 import time
-
+from sqlalchemy import text
 
 def conCursor():
     "Conexão com o banco de dados usando a URL de conexão do Railway"
@@ -76,7 +76,7 @@ def stdeletar():
         if st.button("Sim, eu tenho certeza."):
             try:
                 with engine.begin() as conn:
-                    conn.execute("DELETE FROM usuarios WHERE id = %s", [(st.session_state.delid_pendente,)])
+                    cursor.execute(text('DELETE FROM usuarios WHERE id = :id'), {"id": id_usuario})
                 st.success("Usuário deletado com sucesso!")
             except Exception as e:
                 st.error(f"Erro ao deletar: {e}")
